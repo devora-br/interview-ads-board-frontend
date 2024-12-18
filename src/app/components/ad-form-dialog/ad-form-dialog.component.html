@@ -1,0 +1,34 @@
+<h2 mat-dialog-title>{{ data ? 'Edit Ad' : 'New Ad' }}</h2>
+<mat-dialog-content>
+  <form>
+    <mat-form-field appearance="outline">
+      <mat-label>Title</mat-label>
+      <input matInput [(ngModel)]="formData.title" placeholder="Enter title" name="title" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <textarea matInput [(ngModel)]="formData.description" placeholder="Enter description"
+        name="description"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Location</mat-label>
+      <input matInput [(ngModel)]="formData.location" placeholder="Enter location" name="location" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Category</mat-label>
+      <mat-select [(ngModel)]="formData.category">
+        <mat-option *ngFor="let category of categories" [value]="category">{{ category }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-label>Upload Image</mat-label>
+    <input type="file" (change)="onImageSelected($event)" />
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="save()">Save</button>
+</mat-dialog-actions>
