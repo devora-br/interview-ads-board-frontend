@@ -40,5 +40,4 @@ export class AdFormDialogComponent {
   cancel() {
     this.dialogRef.close(null);
   }
-
 }

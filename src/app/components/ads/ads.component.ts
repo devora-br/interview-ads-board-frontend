@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Ad } from 'src/app/models/ad.model';
-import { AdsService } from 'src/app/services/ads.service';
-import { AdFormDialogComponent } from '../ad-form-dialog/ad-form-dialog.component';
+import { Component, OnInit, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-
+import { AdFormDialogComponent } from '../ad-form-dialog/ad-form-dialog.component';
+import { Ad } from 'src/app/models/ad.model';
+import { AdsStateService } from 'src/app/services/ads-state.service';
 
 @Component({
   selector: 'app-ads',
@@ -12,44 +11,13 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class AdsComponent implements OnInit {
 
-  ads: Ad[] = [];
-  filteredAds: Ad[] = [];
-
-  categories = ['Classes', 'Rent', 'Sale', 'Vehicles', 'Education'];
-
-  searchText: string = '';
-  selectedFilter: keyof Ad = 'location';
-
-  isLoading: boolean = true;
-
-  constructor(public dialog: MatDialog, private adService: AdsService) { }
+  constructor(public dialog: MatDialog, public readonly adService: AdsStateService) { }
 
   ngOnInit(): void {
-    this.fetchAds();
+    this.adService.fetchAds();
   }
 
-  fetchAds(): void {
-    this.isLoading = true;
-    this.adService.getAds().subscribe((data) => {
-      this.ads = data;
-      this.filteredAds = [...this.ads];
-      this.isLoading = false;
-    });
-  }
-
-  applyFilter() {
-    if (!this.searchText.trim()) {
-      this.filteredAds = [...this.ads];
-      return;
-    }
-
-    this.filteredAds = this.ads.filter(ad => {
-      const fieldValue = (ad[this.selectedFilter] as string)?.toLowerCase() || '';
-      return fieldValue.includes(this.searchText.toLowerCase());
-    });
-  }
-
-  openAdDialog() {
+  openAdDialog(): void {
     const dialogRef = this.dialog.open(AdFormDialogComponent, {
       width: '400px',
       data: null,
@@ -57,30 +25,21 @@ export class AdsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-
-        this.adService.createAd(result as Ad).subscribe(() => {
-          this.fetchAds();
-        });
+        this.adService.createAd(result);
       }
     });
   }
 
-  openEditDialog(ad: Ad) {
+  openEditDialog(ad: Ad): void {
     const dialogRef = this.dialog.open(AdFormDialogComponent, {
       width: '400px',
-      data: { ...ad }, // Pass existing ad data
+      data: { ...ad },
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.adService.updateAd(result.id, result).subscribe(() => {
-          this.fetchAds();
-        });
+        this.adService.updateAd(result.id, result);
       }
     });
-  }
-
-  deleteAd(id: number): void {
-    this.adService.deleteAd(id).subscribe(() => this.fetchAds());
   }
 }

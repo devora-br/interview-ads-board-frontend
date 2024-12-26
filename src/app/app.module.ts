@@ -21,12 +21,18 @@ import { GoogleMapsModule } from '@angular/google-maps';
 import { MatOptionModule } from '@angular/material/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { AdFormDialogComponent } from './components/ad-form-dialog/ad-form-dialog.component';
+import { SearchBarComponent } from './components/search-bar/search-bar.component';
+import { AdCardComponent } from './components/ad-card/ad-card.component';
+import { AdsGridComponent } from './components/ads-grid/ads-grid.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AdsComponent,
-    AdFormDialogComponent
+    AdFormDialogComponent,
+    SearchBarComponent,
+    AdCardComponent,
+    AdsGridComponent
   ],
   imports: [
     BrowserModule,

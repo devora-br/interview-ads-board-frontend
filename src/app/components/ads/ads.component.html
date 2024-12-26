@@ -3,54 +3,19 @@
 </mat-toolbar>
 
 <div class="container">
-    <div class="search-section" style="display: flex; align-items: center; margin-top: 1%;">
-        <mat-form-field appearance="outline" class="search-field">
-            <mat-label>Type address or place nearby</mat-label>
-            <input matInput placeholder="Street, City, State" [(ngModel)]="searchText" />
-        </mat-form-field>
-        <mat-form-field style="width: 30%;margin-left: 1%" appearance="outline" class="filter-field">
-            <mat-label>Filter by</mat-label>
-            <mat-select [(ngModel)]="selectedFilter">
-                <mat-option value="location">Location</mat-option>
-                <mat-option value="title">Title</mat-option>
-                <mat-option value="description">Description</mat-option>
-                <mat-option value="category">Category</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <button mat-raised-button color="accent" (click)="applyFilter()" style="margin: 1%">Go</button>
-    </div>
+    <!-- Search Bar -->
+    <app-search-bar></app-search-bar>
+
+    <!-- Add Ad Button -->
     <button mat-icon-button (click)="openAdDialog()">
         <mat-icon>add</mat-icon>
     </button>
 
-    <div *ngIf="isLoading" class="loading-spinner">
+    <!-- Loading Spinner -->
+    <div *ngIf="adService.isLoading()" class="loading-spinner">
         <mat-spinner></mat-spinner>
     </div>
-    <div *ngIf="!isLoading">
-        <div class="grid-container">
-            <div class="grid-item" *ngFor="let ad of filteredAds">
-                <mat-card class="item-card">
-                    <div class="post-details">
-                        <span>Created By: {{ ad.createdBy }}</span>
-                        <span> | </span>
-                        <span>Posted on: {{ ad.createdAt | date:'mediumDate' }}</span>
-                    </div>
-                    <mat-card-header>
-                        <mat-card-title>{{ ad.title }}</mat-card-title>
-                        <mat-card-subtitle>{{ ad.location }}</mat-card-subtitle>
-                    </mat-card-header>
 
-                    <mat-card-content>
-                        <img mat-card-image [src]="ad.imageUrl" alt="Item Image" *ngIf="ad.imageUrl" />
-                        <div>{{ ad.description }}</div>
-                        <p>{{ ad.category }}</p>
-                    </mat-card-content>
-                    <mat-card-actions>
-                        <button mat-button color="primary" (click)="openEditDialog(ad)">Edit</button>
-                        <button mat-button color="warn" (click)="deleteAd(ad.id)">Delete</button>
-                    </mat-card-actions>
-                </mat-card>
-            </div>
-        </div>
-    </div>
+    <!-- Ads Grid -->
+    <app-ads-grid *ngIf="!adService.isLoading()" (editAd)="openEditDialog($event)"></app-ads-grid>
 </div>

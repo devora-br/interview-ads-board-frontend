@@ -1,0 +1,6 @@
+<div class="grid-container">
+    <div class="grid-item" *ngFor="let ad of adsService.filteredAds()">
+        <app-ad-card [ad]="ad" (edit)="onEdit(ad)" (delete)="adsService.deleteAd($event)">
+        </app-ad-card>
+    </div>
+</div>

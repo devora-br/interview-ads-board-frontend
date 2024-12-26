@@ -1,0 +1,9 @@
+.grid-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.grid-item {
+    box-sizing: border-box;
+}
